@@ -3,27 +3,33 @@ import os
 import sys
 import uuid
 
+from rag_preprocess import generate_embeddings, load_document, split_into_chunks
 from tqdm import tqdm
 
-from rag_preprocess import generate_embeddings, load_document, split_into_chunks
 from utils import get_pinecone_index
 
 
 # 제외할 소제목 이전만 남기는 함수
-def clean_dic(data_dict):
+def clean_dic(data_dict, excluded_subtitles):
     text = data_dict.get("text", "")  # 'text' 필드 가져오기
-    for keyword in excluded_subtitle:
+    for keyword in excluded_subtitles:
         if keyword in text:
             text = text.split(keyword)[0]  # 키워드를 기준으로 자르고 첫 번째 부분만 남김
     data_dict["text"] = text.strip()  # 공백 제거 후 업데이트
     return data_dict
 
 
-def rag_preprocessing(page_title, page_index):
-
+def rag_preprocessing(page_text_path, page_title, page_index):
+    """
+    텍스트 파일로 생성된 위키 문서를 벡터화하고 pinecone 벡터 db에 업로드 합니다.
+    meta data로 설정해줄 제목과 인덱스를 인자로 받습니다.
+    Args:
+        page_text_path (_str_): 페이지 본문 내용이 들어간 텍스트 파일 경로
+        page_title (_str_): meta data로 들어갈 페이지 제목
+        page_index (_str_): meta data로 들어갈 페이지 인덱스
+    """
     # Load and process document
-    file_path = "data/wiki_text_upsert.txt"
-    documents = load_document(file_path)
+    documents = load_document(page_text_path)
     chunks = split_into_chunks(documents)
     # print(chunks)
     embeddings = generate_embeddings(chunks, embedding_type="huggingface")
@@ -59,7 +65,7 @@ if __name__ == "__main__":  # noqa: C901
     file_path = "data/wiki_contents_categories_from_test_exp_v1.0.3.csv"
 
     # 제외할 소제목 키워드 정의
-    excluded_subtitle = ["각주", "같이 보기", "참고 자료", "외부 링크"]
+    excluded_subtitles = ["각주", "같이 보기", "참고 자료", "외부 링크"]
 
     # CSV를 딕셔너리로 읽기
     data = []
@@ -67,7 +73,7 @@ if __name__ == "__main__":  # noqa: C901
         reader = csv.DictReader(file)
         for row in reader:
             # 각 dict값의 본문에서 필요없는 소제목을 삭제한 뒤 리스트에 추가
-            cleaned_row = clean_dic(dict(row))
+            cleaned_row = clean_dic(dict(row), excluded_subtitles)
             data.append(cleaned_row)
 
     # 소제목 커팅 결과 확인
@@ -106,8 +112,7 @@ if __name__ == "__main__":  # noqa: C901
         file_name = "wiki_text_upsert.txt"
         os.makedirs(save_path, exist_ok=True)  # 디렉터리 없으면 생성
         file_path = os.path.join(save_path, file_name)
-
         with open(file_path, "w", newline="", encoding="utf-8") as file:
             file.write(text)
 
-        rag_preprocessing(page_title, page_index)
+        rag_preprocessing(file_path, page_title, page_index)
