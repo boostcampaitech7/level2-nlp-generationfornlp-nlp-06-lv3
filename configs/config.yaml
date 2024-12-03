@@ -8,7 +8,7 @@ common:
   seed: 42
   device: "cuda"
   cot_on: false # cot 사용 시 prompt_template을 cot_json으로 변경 필요
-  prompt_template: "base" # base, cot_json
+  prompt_template: "base" # base, cot_json, raft
 
 bnb:
   load_in_8bit: false
@@ -67,3 +67,4 @@ inference:
 
 rag:
   query_builder_type: CombinedKeyQueryBuilder_pqc
+  raft_on: false # RAFT 시 prompt_template을 raft로 변경 필요

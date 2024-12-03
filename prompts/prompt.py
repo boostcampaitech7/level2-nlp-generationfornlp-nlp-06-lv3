@@ -28,6 +28,7 @@ def make_prompt(row: pd.Series, template_type: str = "base") -> str:
         question=row["question"],
         choices=choices_string,
         question_plus=row.get("question_plus", ""),
+        support=row.get("support", ""),
         len_choice=len(row["choices"]),
     )
 
