@@ -16,7 +16,7 @@ def run_rag_pipeline(data_path: str, config: Config, valid_flag: bool = False):
 
     """
 
-    retriever = get_retriever(embedding_model="BAAI/bge-m3", k=5)
+    retriever = get_retriever(embedding_model="BAAI/bge-m3", k=5, minimal_score=0.4)
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
     # config 내 query builder type을 통해 query builder setting

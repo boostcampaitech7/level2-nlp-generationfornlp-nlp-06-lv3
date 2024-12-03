@@ -7,16 +7,17 @@ from langchain_pinecone import PineconeVectorStore
 from utils import get_pinecone_index
 
 
-def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5):
+def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5, minimal_score: float = 0.4):
     """
     Pinecone에 연결된 Retriever를 생성하고 반환합니다.
 
     Args:
         embedding_model (str): 임베딩에 사용할 허깅페이스 모델 이름
         k (int): similarity search로 불러올 문서 개수
+        minimal_score (float): 유사도 임계값(유사도가 임계값보다 큰 벡터들만 가져오게 됩니다)
 
     Returns:
-        LangChain retriever
+        langchain retriever
     """
 
     # Pinecone index 연결
@@ -29,7 +30,9 @@ def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5):
     vector_store = PineconeVectorStore(index=pinecone_index, embedding=embeddings, text_key="text")
 
     # Retriever 반환
-    return vector_store.as_retriever(search_kwargs={"k": k})
+    return vector_store.as_retriever(
+        search_type="similarity_score_threshold", search_kwargs={"k": k, "score_threshold": minimal_score}
+    )
 
 
 def read_csv_for_rag_query(file_path: str) -> pd.DataFrame:
