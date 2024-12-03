@@ -39,12 +39,14 @@ def rag_preprocessing(page_title, page_index):
     file_path = "data/wiki_text_upsert.txt"
     documents = load_document(file_path)
     chunks = split_into_chunks(documents)
+    print(chunks)
     embeddings = generate_embeddings(chunks, embedding_type="huggingface")
 
     # Prepare and upsert embeddings with unique IDs
     upsert_data = []
-    for i, (chunk, embedding) in tqdm(enumerate(zip(chunks, embeddings))):
+    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
         unique_id = f"{chunk.metadata.get('document_id', 'unknown')}_{i}_{uuid.uuid4()}"
+
         upsert_data.append(
             {
                 "id": unique_id,  # 고유한 ID 생성
@@ -59,18 +61,24 @@ def rag_preprocessing(page_title, page_index):
         )
 
     # Upload embeddings
+
     pinecone_index.upsert(vectors=upsert_data)
+
     # print(f"Upserted {len(embeddings)} embeddings with metadata to Pinecone index '{index_name}'.")
 
 
-save_path = "../data"
+save_path = "data"
+continue_flag = 0
 
-for i in raw_data[:3]:
-    text = i["text"]
-    print(text)
+for i in tqdm(raw_data[400:800], desc="400~800"):
+    for key in list(i.keys()):
+        if not i[key]:
+            continue_flag = 1
+            break
+    if continue_flag == 1:
+        continue_flag = 0
+        continue
 
-
-for i in tqdm(raw_data[:400], desc="~400"):
     text = i["text"]
     page_index = i["page_index"]
     page_title = i["title"]
@@ -83,7 +91,15 @@ for i in tqdm(raw_data[:400], desc="~400"):
 
     rag_preprocessing(page_title, page_index)
 
-for i in tqdm(raw_data[400:800], desc="400~800"):
+for i in tqdm(raw_data[:400], desc="~400"):
+    for key in list(i.keys()):
+        if not i[key]:
+            continue_flag = 1
+            break
+    if continue_flag == 1:
+        continue_flag = 0
+        continue
+
     text = i["text"]
     page_index = i["page_index"]
     page_title = i["title"]
@@ -97,6 +113,14 @@ for i in tqdm(raw_data[400:800], desc="400~800"):
     rag_preprocessing(page_title, page_index)
 
 for i in tqdm(raw_data[800:1200], desc="800~1200"):
+    for key in list(i.keys()):
+        if not i[key]:
+            continue_flag = 1
+            break
+    if continue_flag == 1:
+        continue_flag = 0
+        continue
+
     text = i["text"]
     page_index = i["page_index"]
     page_title = i["title"]
@@ -110,6 +134,14 @@ for i in tqdm(raw_data[800:1200], desc="800~1200"):
     rag_preprocessing(page_title, page_index)
 
 for i in tqdm(raw_data[1200:1600], desc="1200~1600"):
+    for key in list(i.keys()):
+        if not i[key]:
+            continue_flag = 1
+            break
+    if continue_flag == 1:
+        continue_flag = 0
+        continue
+
     text = i["text"]
     page_index = i["page_index"]
     page_title = i["title"]
@@ -123,6 +155,14 @@ for i in tqdm(raw_data[1200:1600], desc="1200~1600"):
     rag_preprocessing(page_title, page_index)
 
 for i in tqdm(raw_data[1600:], desc="1600~"):
+    for key in list(i.keys()):
+        if not i[key]:
+            continue_flag = 1
+            break
+    if continue_flag == 1:
+        continue_flag = 0
+        continue
+
     text = i["text"]
     page_index = i["page_index"]
     page_title = i["title"]
