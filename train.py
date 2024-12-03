@@ -56,6 +56,8 @@ def train(config: Config):
 
     if config.common.cot_on:
         conditional_metrics_fn = None
+    elif config.rag.raft_on:
+        conditional_metrics_fn = None
     else:
         conditional_metrics_fn = compute_metrics_fn
 
