@@ -25,6 +25,7 @@ langchain-community
 langchain_huggingface
 langchain_pinecone
 langchain_core
+kiwipiepy
 
 # Development Packages
 tqdm
