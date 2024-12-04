@@ -3,7 +3,7 @@ from ast import literal_eval
 import pandas as pd
 from tqdm import tqdm
 
-from rag_modules import create_chain, get_retriever
+from rag_modules import create_chain, get_retriever, read_csv_for_rag_query, combined_key_query_builder
 from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
@@ -17,10 +17,7 @@ def run_rag_pipeline(data_path: str, valid_flag: bool = False):
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
     # CSV 파일 로드
-    df = pd.read_csv(data_path)
-
-    df["choices"] = df["choices"].apply(literal_eval)
-    df["question_plus"] = df["question_plus"].fillna("")
+    df = read_csv_for_rag_query(data_path)
 
     # 결과 저장용 리스트
     results = []
@@ -32,7 +29,11 @@ def run_rag_pipeline(data_path: str, valid_flag: bool = False):
         question = row["question"] + question_plus_string
         choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
 
-        retrieved_docs = retriever.invoke(row["paragraph"])
+        query_builder = combined_key_query_builder(["paragraph"])
+        query = query_builder.build(row)
+
+        print(query)
+        retrieved_docs = retriever.invoke(query)
 
         support = format_docs(retrieved_docs)
 
