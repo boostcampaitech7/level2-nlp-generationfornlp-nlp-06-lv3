@@ -2,10 +2,10 @@ from typing import List
 
 import pandas as pd
 
-from .base_query_builder import query_builder
+from .base_query_builder import QueryBuilder
 
 
-class original_key_query_builder(query_builder):
+class OriginalKeyQueryBuilder(QueryBuilder):
     """
     주어진 row에서 추가적인 처리 없이 단일 key 값을 추출하는 쿼리 빌더.
 
@@ -40,7 +40,7 @@ class original_key_query_builder(query_builder):
         return row.get(self.key)
 
 
-class original_keywords_query_builder(original_key_query_builder):
+class OriginalKeywordsQueryBuilder(OriginalKeyQueryBuilder):
     """
     주어진 row에서 keywords들을 전부 concat해 반환하는 query builder
     """
@@ -53,7 +53,7 @@ class original_keywords_query_builder(original_key_query_builder):
         return " ".join(keyword for keyword in keywords)
 
 
-class original_exist_keywords_query_builder(original_key_query_builder):
+class OriginalExistKeywordsQueryBuilder(OriginalKeyQueryBuilder):
     """
     주어진 row에서 keywords_exists가 true인 keywords들을 전부 concat해 반환하는 query builder
     """
@@ -69,7 +69,7 @@ class original_exist_keywords_query_builder(original_key_query_builder):
         return " ".join(keyword for keyword, exists in zip(keywords, keywords_exists) if exists == 1)
 
 
-class combined_key_query_builder(query_builder):
+class CombinedKeyQueryBuilder(QueryBuilder):
     def __init__(self, keys: List[str]):
         self.keys = keys
 

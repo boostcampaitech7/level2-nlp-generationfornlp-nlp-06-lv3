@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from configs import Config, create_rag_config
 from rag_modules import (
-    combined_key_query_builder,
+    CombinedKeyQueryBuilder,
     create_chain,
     get_retriever,
     read_csv_for_rag_query,
@@ -26,9 +26,8 @@ def run_rag_pipeline(data_path: str, config: Config, valid_flag: bool = False):
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
     # config 내 query builder type을 통해 query로 사용할 columns setting
-    rag_config = create_rag_config(config.rag)
-    columns = set_columns_from_config(rag_config.query_builder_type)
-    query_builder = combined_key_query_builder(columns)
+    columns = set_columns_from_config(config.rag.query_builder_type)
+    query_builder = CombinedKeyQueryBuilder(columns)
 
     # CSV 파일 로드
     df = read_csv_for_rag_query(file_path=data_path)

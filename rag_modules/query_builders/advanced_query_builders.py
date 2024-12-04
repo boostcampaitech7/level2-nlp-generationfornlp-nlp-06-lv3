@@ -6,7 +6,7 @@ import pandas as pd
 from kiwipiepy import Kiwi
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from .base_query_builder import query_builder
+from .base_query_builder import QueryBuilder
 
 
 # Kiwi 기반 커스텀 토크나이저 정의 (명사, 미분류)
@@ -23,7 +23,7 @@ def kiwi_tokenizer(text):
     return list(nouns + additional_candidates)
 
 
-class tf_idf_query_builder(query_builder):
+class TFIDFQueryBuilder(QueryBuilder):
     def __init__(self, selected_columns: Union[str, List[str]], top_k: int = 5):
         """
         TF-IDF query builder 초기화

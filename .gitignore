@@ -178,10 +178,6 @@ pyrightconfig.json
 data/*
 !data/.gitkeep
 
-rag_data/*
-!data/.gitkeep
-
-
 *.csv
 output*/
 
