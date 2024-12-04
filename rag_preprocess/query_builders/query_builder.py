@@ -11,7 +11,7 @@ class query_builder(ABC):
     def __init__(self, data: pd.Series):
         self.paragraph = data.get("paragraph", "")
         self.question = data.get("question", "")
-        self.choices = data.get("choices", [])
+        self.choices = " ".join(data.get("choices", []))
         self.question_plus = data.get("question_plus", "")
 
     @abstractmethod
