@@ -20,6 +20,5 @@ class RAFTDataLoader(TrainDataLoader):
                 {"role": "user", "content": user_prompt},
                 {"role": "assistant", "content": json.dumps({"answer": str(data["answer"])}, ensure_ascii=False)},
             ],
-            # "label": data["answer"], # train, eval 둘다 안쓰임..
             "len_choices": len_choices,
         }
