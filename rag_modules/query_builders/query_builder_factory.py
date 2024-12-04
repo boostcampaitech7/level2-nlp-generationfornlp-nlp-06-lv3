@@ -12,10 +12,17 @@ def set_query_builder_from_config(query_builder_type: str) -> QueryBuilder:
     query builder type에 따라 query building 시 사용되는 query builder를 반환합니다.
 
     Args:
-        query_builder_type (str): 사전 정의된 query builder type str
+        query_builder_type (str):
+            사전 정의된 query builder type str.
+            CombinedKeyQueryBuilder는 그에 활용하는 column keys에 따라 종류가 분류되며,
+            해당 key를 class명 뒤에 붙여 구분합니다.
+            p: paragraph
+            s: summarization
+            q: full_question
+            c: choices_text
 
     Returns:
-        QueryBuilder: query_builder_type에 따른 QueryBuilder
+        QueryBuilder: query_builder_type에 따른 QueryBuilder.
     """
     match query_builder_type:
         case "OriginalKeywordsQueryBuilder":
