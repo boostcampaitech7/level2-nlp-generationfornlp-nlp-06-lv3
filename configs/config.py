@@ -23,6 +23,7 @@ class Config:
         self.wandb = WandbConfig(**self.raw_config["wandb"])
         self.train = TrainConfig(**self.raw_config["train"])
         self.inference = InferenceConfig(**self.raw_config["inference"])
+        self.rag = RagConfig(**self.raw_config["rag"])
 
 
 @dataclass
@@ -108,3 +109,8 @@ class InferenceConfig:
     output_path: str
     raw_output_path: str = "data/raw_output.csv"
     default_answer: int = 1
+
+
+@dataclass
+class RagConfig:
+    query_builder_type: str
