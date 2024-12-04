@@ -7,7 +7,7 @@ from rag_modules import create_chain, get_retriever
 from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
-def run_rag_pipeline():
+def run_rag_pipeline(data_path: str, valid_flag: bool = False):
     """
     전체 RAG pipeline을 실행하는 함수입니다.
 
@@ -17,7 +17,7 @@ def run_rag_pipeline():
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
     # CSV 파일 로드
-    df = pd.read_csv("data/valid_v2.0.1.csv")
+    df = pd.read_csv(data_path)
 
     df["choices"] = df["choices"].apply(literal_eval)
     df["question_plus"] = df["question_plus"].fillna("")
@@ -55,14 +55,18 @@ def run_rag_pipeline():
 
     result_df = pd.DataFrame(results)
 
-    # valid accuracy 확인
-    check_valid_score(valid_df=df, result_df=result_df)
-    # 정답, 오답 index 정보 저장
-    record_right_answer(valid_df=df, result_df=result_df)
+    if valid_flag:
+        # valid accuracy 확인
+        check_valid_score(valid_df=df, result_df=result_df)
+        # 정답, 오답 index 정보 저장
+        record_right_answer(valid_df=df, result_df=result_df)
 
-    result_df.to_csv("data/valid_output.csv", index=False)
+        result_df.to_csv("data/valid_output.csv", index=False)
+    else:
+        result_df.to_csv("data/output.csv", index=False)
 
 
 if __name__ == "__main__":
     set_seed(42)
-    run_rag_pipeline()
+    data_path = "data/test_v1.0.2.csv"
+    run_rag_pipeline(data_path=data_path, valid_flag=False)
