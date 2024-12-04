@@ -24,18 +24,18 @@ def kiwi_tokenizer(text):
 
 
 class tf_idf_query_builder(query_builder):
-    def __init__(self, columns: Union[str, List[str]], top_k: int = 5):
+    def __init__(self, selected_columns: Union[str, List[str]], top_k: int = 5):
         """
         TF-IDF query builder 초기화
 
         Args:
-            columns (Union[str, List[str]]):
+            selected_columns (Union[str, List[str]]):
                 TF-IDF 계산에 사용할 열
                 단일 열 이름이나 열 이름 목록을 받을 수 있다.
             top_k (int):
                 TF-IDF 점수를 기준으로 추출할 상위 키워드 개수. 기본값은 5
         """
-        self.columns = columns
+        self.selected_columns = selected_columns
         self.top_k = top_k  # 키워드 상위 개수
 
     def _extract_keywords(self, text: str) -> list[str]:
@@ -65,7 +65,7 @@ class tf_idf_query_builder(query_builder):
         TF-IDF를 통해 추출한 키워드를 연결한 query 생성
         """
         # 지문에서 키워드 추출
-        text = "".join(map(str, row[self.columns]))
+        text = "".join(map(str, row[self.selected_columns]))
         keywords = self._extract_keywords(text)
 
         query = " ".join(keywords)
