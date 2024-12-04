@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from rag_modules import create_chain, get_retriever
-from utils import check_valid_score, format_docs, set_seed
+from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
 def run_rag_pipeline():
@@ -57,6 +57,8 @@ def run_rag_pipeline():
 
     # valid accuracy 확인
     check_valid_score(valid_df=df, result_df=result_df)
+    # 정답, 오답 index 정보 저장
+    record_right_answer(valid_df=df, result_df=result_df)
 
     result_df.to_csv("data/valid_output.csv", index=False)
 
