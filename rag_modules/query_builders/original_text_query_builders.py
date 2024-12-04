@@ -6,22 +6,22 @@ from .base_query_builder import query_builder
 
 
 class original_paragraph_query_builder(query_builder):
-    def build(self, data: pd.Series) -> str:
-        return data.get("paragraph", "")
+    def build(self, row: pd.Series) -> str:
+        return row.get("paragraph", "")
 
 
 class original_question_query_builder(query_builder):
-    def build(self, data: pd.Series) -> str:
-        return data.get("question", "")
+    def build(self, row: pd.Series) -> str:
+        return row.get("question", "")
 
 
 class original_choices_query_builder(query_builder):
-    def build(self, data: pd.Series) -> str:
-        choices = literal_eval(data.get("choices", ""))
+    def build(self, row: pd.Series) -> str:
+        choices = literal_eval(row.get("choices", ""))
         choices_string = "\n".join(choices)
         return choices_string
 
 
 class original_question_plus_query_builder(query_builder):
-    def build(self, data: pd.Series) -> str:
-        return data.get("question_plus", "")
+    def build(self, row: pd.Series) -> str:
+        return row.get("question_plus", "")
