@@ -5,14 +5,8 @@ import dotenv
 import pandas as pd
 from tqdm import tqdm
 
-from configs import Config, create_rag_config
-from rag_modules import (
-    CombinedKeyQueryBuilder,
-    create_chain,
-    get_retriever,
-    read_csv_for_rag_query,
-    set_columns_from_config,
-)
+from configs import Config
+from rag_modules import create_chain, get_retriever, read_csv_for_rag_query, set_query_builder_from_config
 from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
@@ -25,9 +19,8 @@ def run_rag_pipeline(data_path: str, config: Config, valid_flag: bool = False):
     retriever = get_retriever(embedding_model="BAAI/bge-m3", k=5)
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
-    # config 내 query builder type을 통해 query로 사용할 columns setting
-    columns = set_columns_from_config(config.rag.query_builder_type)
-    query_builder = CombinedKeyQueryBuilder(columns)
+    # config 내 query builder type을 통해 query builder setting
+    query_builder = set_query_builder_from_config(config.rag.query_builder_type)
 
     # CSV 파일 로드
     df = read_csv_for_rag_query(file_path=data_path)

@@ -24,14 +24,14 @@ def kiwi_tokenizer(text):
 
 
 class TFIDFQueryBuilder(QueryBuilder):
-    def __init__(self, selected_columns: Union[str, List[str]], top_k: int = 5):
+    def __init__(self, selected_columns: Union[str, List[str]] = "paragraph", top_k: int = 5):
         """
         TF-IDF query builder 초기화
 
         Args:
             selected_columns (Union[str, List[str]]):
                 TF-IDF 계산에 사용할 열
-                단일 열 이름이나 열 이름 목록을 받을 수 있다.
+                단일 열 이름이나 열 이름 목록을 받을 수 있다. 기본값은 "paragraph"
             top_k (int):
                 TF-IDF 점수를 기준으로 추출할 상위 키워드 개수. 기본값은 5
         """

@@ -66,4 +66,4 @@ inference:
   default_answer: 1
 
 rag:
-  query_builder_type: 1
+  query_builder_type: CombinedKeyQueryBuilder_pqc
