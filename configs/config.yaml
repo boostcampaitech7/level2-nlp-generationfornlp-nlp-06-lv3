@@ -64,3 +64,6 @@ inference:
   output_path: "data/output.csv"
   raw_output_path: "data/raw_output.csv"
   default_answer: 1
+
+rag:
+  query_builder_type: 1

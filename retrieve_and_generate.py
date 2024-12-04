@@ -2,12 +2,15 @@ from ast import literal_eval
 
 import pandas as pd
 from tqdm import tqdm
-
-from rag_modules import create_chain, get_retriever, read_csv_for_rag_query, combined_key_query_builder
+import dotenv
+import argparse
+from configs import Config, create_rag_config
+from rag_modules import create_chain, get_retriever, read_csv_for_rag_query, set_columms_from_config
+from rag_modules import combined_key_query_builder
 from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
-def run_rag_pipeline(data_path: str, valid_flag: bool = False):
+def run_rag_pipeline(data_path: str, config: Config, valid_flag: bool = False):
     """
     전체 RAG pipeline을 실행하는 함수입니다.
 
@@ -16,8 +19,13 @@ def run_rag_pipeline(data_path: str, valid_flag: bool = False):
     retriever = get_retriever(embedding_model="BAAI/bge-m3", k=5)
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
+    # config 내 query builder type을 통해 query로 사용할 columns setting
+    rag_config = create_rag_config(config.rag)
+    columns = set_columms_from_config(rag_config.query_builder_type)
+    query_builder = combined_key_query_builder(columns)
+
     # CSV 파일 로드
-    df = read_csv_for_rag_query(data_path)
+    df = read_csv_for_rag_query(file_path=data_path)
 
     # 결과 저장용 리스트
     results = []
@@ -29,10 +37,8 @@ def run_rag_pipeline(data_path: str, valid_flag: bool = False):
         question = row["question"] + question_plus_string
         choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
 
-        query_builder = combined_key_query_builder(["paragraph"])
         query = query_builder.build(row)
 
-        print(query)
         retrieved_docs = retriever.invoke(query)
 
         support = format_docs(retrieved_docs)
@@ -68,6 +74,20 @@ def run_rag_pipeline(data_path: str, valid_flag: bool = False):
 
 
 if __name__ == "__main__":
-    set_seed(42)
+    dotenv.load_dotenv()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--config_file", type=str, default="config.yaml")
+    args = parser.parse_args()
+
+    try:
+        config = Config(args.config_file)
+    except FileNotFoundError:
+        print(f"Config file not found: {args.config_file}")
+        print("Run with default config: config.yaml\n")
+        config = Config()
+
+    set_seed(config.common.seed)
+
     data_path = "data/test_v1.0.2.csv"
-    run_rag_pipeline(data_path=data_path, valid_flag=False)
+    run_rag_pipeline(data_path=data_path, config=config, valid_flag=False)

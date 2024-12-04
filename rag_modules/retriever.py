@@ -58,3 +58,19 @@ def read_csv_for_rag_query(file_path: str) -> pd.DataFrame:
         ].apply(lambda row: row.astype(int).tolist(), axis=1)
 
     return df
+
+
+def set_columms_from_config(query_builder_type: int):
+    match query_builder_type:
+        case 1:
+            return ["paragraph"]
+        case 2:
+            return ["paragraph", "full_question"]
+        case 3:
+            return ["paragraph", "full_question", "choices_text"]
+        case 4:
+            return ["summarization"]
+        case 5:
+            return ["summarization", "full_question"]
+        case _:
+            return ["summarization", "full_question", "choices_text"]
