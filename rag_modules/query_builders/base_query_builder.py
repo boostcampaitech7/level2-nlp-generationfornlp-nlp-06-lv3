@@ -11,6 +11,6 @@ class query_builder(ABC):
     @abstractmethod
     def build(self, data: pd.Series) -> str:
         """
-        Query를 생성하는 메인 메서드.
+        query를 생성하는 메인 메서드.
         """
         pass

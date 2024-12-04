@@ -1,12 +1,18 @@
+import argparse
 from ast import literal_eval
 
+import dotenv
 import pandas as pd
 from tqdm import tqdm
-import dotenv
-import argparse
+
 from configs import Config, create_rag_config
-from rag_modules import create_chain, get_retriever, read_csv_for_rag_query, set_columms_from_config
-from rag_modules import combined_key_query_builder
+from rag_modules import (
+    combined_key_query_builder,
+    create_chain,
+    get_retriever,
+    read_csv_for_rag_query,
+    set_columns_from_config,
+)
 from utils import check_valid_score, format_docs, record_right_answer, set_seed
 
 
@@ -21,7 +27,7 @@ def run_rag_pipeline(data_path: str, config: Config, valid_flag: bool = False):
 
     # config 내 query builder type을 통해 query로 사용할 columns setting
     rag_config = create_rag_config(config.rag)
-    columns = set_columms_from_config(rag_config.query_builder_type)
+    columns = set_columns_from_config(rag_config.query_builder_type)
     query_builder = combined_key_query_builder(columns)
 
     # CSV 파일 로드

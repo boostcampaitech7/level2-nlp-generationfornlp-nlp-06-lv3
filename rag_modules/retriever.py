@@ -1,9 +1,10 @@
+from ast import literal_eval
+
+import pandas as pd
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain_pinecone import PineconeVectorStore
 
 from utils import get_pinecone_index
-import pandas as pd
-from ast import literal_eval
 
 
 def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5):
@@ -32,12 +33,22 @@ def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5):
 
 
 def read_csv_for_rag_query(file_path: str) -> pd.DataFrame:
+    """
+    csv 파일을 결측치 처리, str의 List화 등의 전처리를 진행해 query building이 가능한 DataFrame으로 읽어옵니다.
+
+    Args:
+        file_path (str): csv 파일을 읽어올 경로
+
+    Returns:
+        pd.DataFrame: query building 관련 전처리가 완료된 DataFrame
+    """
     df = pd.read_csv(file_path)
 
+    # 결측치 처리 및 List로 type 변환
     df["question_plus"] = df["question_plus"].fillna("")
     df["choices"] = df["choices"].apply(literal_eval)
 
-    # choices를 한 문장으로 연결
+    # choices를 한 문장으로 연결한 choices_text 생성
     df["choices_text"] = df["choices"].apply(lambda x: " ".join(x))
 
     # question과 <보기> 를 합친 full question 생성
@@ -60,7 +71,16 @@ def read_csv_for_rag_query(file_path: str) -> pd.DataFrame:
     return df
 
 
-def set_columms_from_config(query_builder_type: int):
+def set_columns_from_config(query_builder_type: int) -> list[str]:
+    """
+    query builder type에 따라 query building 시 사용되는 column 명 리스트를 반환합니다.
+
+    Args:
+        query_builder_type (int): 사전 정의된 query builder type 번호
+
+    Returns:
+        list[str]: query builder type에 따른 사용 column명
+    """
     match query_builder_type:
         case 1:
             return ["paragraph"]
