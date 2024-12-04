@@ -75,8 +75,8 @@ class CombinedKeyQueryBuilder(QueryBuilder):
 
     def build(self, row: pd.Series) -> str:
         query = ""
-        for key in self.keys:
-            if key not in row.index:
-                raise KeyError(f"The key '{key}' does not exist in the provided row.")
-            query = query + " " + row.get(key)
+        if not all(key in row.index for key in self.keys):
+            missing_keys = [key for key in self.keys if key not in row.index]
+            raise KeyError(f"The following keys are missing in the provided row: {missing_keys}")
+        query = " ".join(row[key] for key in self.keys)
         return query
