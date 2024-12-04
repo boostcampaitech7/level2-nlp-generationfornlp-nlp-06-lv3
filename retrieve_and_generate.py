@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from rag_modules import create_chain, get_retriever
-from utils import check_valid_score, set_seed
+from utils import check_valid_score, format_docs, set_seed
 
 
 def run_rag_pipeline():
@@ -31,12 +31,17 @@ def run_rag_pipeline():
         question_plus_string = ("\n\n<보기>:\n" + row["question_plus"]) if row["question_plus"] else ""
         question = row["question"] + question_plus_string
         choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
+
+        retrieved_docs = retriever.invoke(row["paragraph"])
+
+        support = format_docs(retrieved_docs)
+
         inputs = {
             "len_choice": len(row["choices"]),
             "question": question,
             "paragraph": row["paragraph"],
             "choices": choices_string,
-            "support": retriever.invoke(question),
+            "support": support,
         }
 
         try:

@@ -31,3 +31,8 @@ def check_valid_score(valid_df, result_df):
 
     print(f"valid accuracy: {accuracy * 100:.2f}%")
     return accuracy
+
+
+def format_docs(docs):
+    # 검색한 문서 결과를 하나의 문단으로 합쳐줍니다.
+    return "\n\n".join(doc.page_content for doc in docs)
