@@ -2,9 +2,28 @@ import torch
 from langchain.output_parsers import OutputFixingParser
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_huggingface import HuggingFacePipeline
+from pydantic import BaseModel, Field
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
+# template 전역변수로 설정
+template = (
+    "당신은 질문-답변(Question-Answering)을 수행하는 친절한 AI 어시스턴트입니다. "
+    "당신의 임무는 주어진 지문(Paragraph)과 선택지(Choices)를 바탕으로 질문(Question)에 가장 적합한 답을 선택하는 것입니다.\n"
+    "선택지는 총 {len_choice}개이며, 각 선택지에는 고유한 번호가 있습니다. "
+    "답변 형태는 반드시 선택지 번호(1~{len_choice}) 중 하나로만 출력하세요. (예시: 4)\n\n"
+    "# Question:\n"
+    "{question}\n\n"
+    "# Paragraph:\n"
+    "{paragraph}\n\n"
+    "# Choices:\n"
+    "{choices}\n\n"
+    "# Support:\n"
+    "{support}\n\n"
+    "# Answer:\n"
+    "# FORMAT:\n"
+    "{format}\n"
+)
 
 
 # 출력 형태를 지정해주기 위해 필요합니다.
@@ -36,25 +55,6 @@ def create_chain(model_id: str = "google/gemma-2-2b-it", max_new_tokens: int = 2
         return_full_text=False,
     )
     llm = HuggingFacePipeline(pipeline=gen)
-
-    # template 전역변수로 설정
-    template = (
-        "당신은 질문-답변(Question-Answering)을 수행하는 친절한 AI 어시스턴트입니다. "
-        "당신의 임무는 주어진 지문(Paragraph)과 선택지(Choices)를 바탕으로 질문(Question)에 가장 적합한 답을 선택하는 것입니다.\n"
-        "선택지는 총 {len_choice}개이며, 각 선택지에는 고유한 번호가 있습니다. "
-        "답변 형태는 반드시 선택지 번호(1~{len_choice}) 중 하나로만 출력하세요. (예시: 4)\n\n"
-        "# Question:\n"
-        "{question}\n\n"
-        "# Paragraph:\n"
-        "{paragraph}\n\n"
-        "# Choices:\n"
-        "{choices}\n\n"
-        "# Support:\n"
-        "{support}\n\n"
-        "# Answer:\n"
-        "# FORMAT:\n"
-        "{format}\n"
-    )
 
     parser = JsonOutputParser(pydantic_object=Output)
     fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
