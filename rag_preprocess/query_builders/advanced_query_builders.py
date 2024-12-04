@@ -1,5 +1,5 @@
 import re
-from ast import literal_eval
+from typing import List, Union
 
 import numpy as np
 import pandas as pd
@@ -25,10 +25,11 @@ def kiwi_tokenizer(text):
 
 
 class tf_idf_query_builder(query_builder):
-    def __init__(self, top_k: int = 5):
+    def __init__(self, columns: Union[str, List[str]], top_k: int = 5):
         """
         :param top_k: TF-IDF 상위 키워드 개수
         """
+        self.columns = columns
         self.top_k = top_k  # 키워드 상위 개수
 
     def _extract_keywords(self, text: str) -> list[str]:
@@ -54,11 +55,9 @@ class tf_idf_query_builder(query_builder):
         TF-IDF 키워드를 활용해 Query 생성.
         """
         # 지문에서 키워드 추출
-        choices = literal_eval(row.get("choices", ""))
-        choices_string = "\n".join(choices)
-        keywords = self._extract_keywords(row["question"] + choices_string)
-        print(row["question"] + choices_string)
+        text = "".join(map(str, row[self.columns]))
+        keywords = self._extract_keywords(text)
+        print(text)
         keywords_text = " ".join(keywords)
 
-        # 질문과 결합하여 Query 생성
         return keywords_text
