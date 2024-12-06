@@ -1,0 +1,106 @@
+You are a judge responsible for creating and reviewing Korean CSAT non-literature questions.  
+Extract up to five specific Korean keywords from the given text, such as technical terms used in a particular domain, historical events, figures, or organizations.  
+Limit the keywords to those most essential for understanding the text, and your response should include only the keywords.
+
+### Example 1
+- Paragraph
+신경성 식욕부진증은 영구적인 생리적 변화(예: 파쇄골)는 물론 심하면 사망까지 초래할 수 있는 생명을 위협하는 질병입니다.
+
+- Question Plus(if provided)
+
+- Question
+다음 중 이 질병에 걸릴 가능성이 가장 높은 사람은 누구입니까?
+
+- Choices
+['모범생이자 재능 있는 음악가이지만 자신의 삶이 통제 불능이라고 느끼는 16세 백인 여성 Maria', '모범생이자 뛰어난 운동선수이며 열렬한 독서광이기도 한 15세 아프리카계 미국인 여성 Leticia', '이제 막 법학 학위를 취득했지만 여전히 학자금 대출로 인한 생활고와 취업에 어려움을 겪고 있는 26세 히스패닉계 미국인 여성 Rosa', '성적으로 난잡하고 마약에 빠져 있는 평균 성적의 14세 백인 여성 Virginia']
+
+- Answer
+1
+
+- Reasoning
+문제 분석
+문제는 신경성 식욕부진증(Anorexia Nervosa)에 걸릴 가능성이 가장 높은 사람을 선택하는 것입니다. 이를 위해 각 선택지에 나열된 사람들의 **나이, 성별, 인종, 심리적 특성, 환경적 요인**과 **신경성 식욕부진증의 위험 요인**을 비교해야 합니다.
+
+신경성 식욕부진증의 주요 위험 요인
+1. **나이와 성별**: 주로 15~19세 사이의 청소년과 젊은 여성에게 가장 많이 발생합니다【16】【18】.
+2. **심리적 요인**: 완벽주의, 강박적 성격, 자기 비판적 성향이 위험을 증가시킵니다【17】【20】.
+3. **사회적 압력**: 마른 체형에 대한 이상화, 가족이나 또래로부터의 체중 관련 비판이 영향을 미칩니다【17】【19】.
+4. **환경적 요인**: 통제 불능 감각, 가정 내 갈등, 그리고 체중 감량에 대한 강박적 요구가 포함됩니다【16】【20】.
+5. **인종적 차이**: 백인 여성에게서 가장 높은 발병률이 나타납니다【16】【18】.
+
+선택지 분석
+1. **Maria (16세 백인 여성)**:
+   - **나이와 성별**: 고위험군(청소년 여성).
+   - **심리적 특성**: 삶의 통제 불능감(위험 요인과 부합).
+   - **인종적 특성**: 백인은 신경성 식욕부진증의 높은 유병률을 보임.
+   - **판단**: 가장 높은 위험군.
+
+2. **Leticia (15세 아프리카계 미국인 여성)**:
+   - **나이와 성별**: 위험군에 속하지만, 아프리카계 여성은 유병률이 낮음.
+   - **심리적 특성**: 문제 요인이 언급되지 않음.
+   - **판단**: 상대적으로 낮은 위험.
+
+3. **Rosa (26세 히스패닉계 미국인 여성)**:
+   - **나이**: 청소년기를 벗어난 성인은 위험군이 아님.
+   - **환경적 요인**: 재정적 스트레스가 있지만 신경성 식욕부진증보다는 다른 정신 건강 문제로 이어질 가능성이 높음.
+   - **판단**: 위험군에서 제외.
+
+4. **Virginia (14세 백인 여성)**:
+   - **나이와 성별**: 위험군에 속함.
+   - **행동적 요인**: 마약과 성적으로 난잡한 행동은 다른 정신 건강 문제의 지표일 가능성이 높음.
+   - **판단**: 중간 위험.
+
+결론
+Maria는 위험 요인을 가장 많이 포함하고 있어, 신경성 식욕부진증에 걸릴 가능성이 가장 높습니다. 따라서 **정답은 1번 Maria**입니다.
+
+- Keywords
+신경성 식욕부진증, 심리적 요인, 사회적 압력, 인종적 차이, 위험 요인
+
+### Example 2
+- Paragraph
+할인율      명목 금리      총 수요
+
+- Question Plus(if provided)
+
+- Question
+긴축 통화 정책이란 할인율, 명목 금리 및 총 수요에 대한 다음 중 어떤 것을 의미합니까?
+
+- Choices
+['감소 \xa0\xa0\xa0\xa0 \xa0\xa0\xa0\xa0 증가 \xa0\xa0\xa0\xa0 감소', '증가 \xa0\xa0\xa0\xa0 \xa0\xa0\xa0\xa0 증가 \xa0\xa0\xa0\xa0 감소', '감소 \xa0\xa0\xa0\xa0 \xa0\xa0\xa0\xa0 감소 \xa0\xa0\xa0\xa0 감소', '증가 \xa0\xa0\xa0\xa0 \xa0\xa0\xa0\xa0 증가 \xa0\xa0\xa0\xa0 증가']
+
+- Answer
+2
+
+- Reasoning
+긴축적 통화정책은 중앙은행이 경제 과열이나 인플레이션을 억제하기 위해 통화 공급을 줄이고 금리를 인상하는 정책을 말합니다. 이러한 정책이 할인율, 명목 금리, 총수요에 미치는 영향을 분석해보겠습니다.
+
+1. 할인율의 변화
+
+중앙은행은 긴축적 통화정책의 일환으로 재할인율을 인상합니다. 재할인율은 상업은행이 중앙은행에서 자금을 빌릴 때 적용되는 금리로, 이 금리가 상승하면 상업은행의 차입 비용이 증가하여 시중에 공급되는 자금이 줄어듭니다. 따라서, 긴축적 통화정책은 할인율의 증가를 의미합니다.
+
+2. 명목 금리의 변화
+
+긴축적 통화정책의 핵심 수단은 기준금리 인상입니다. 기준금리가 상승하면 단기 및 장기 시장금리, 은행 예금 및 대출 금리 등 금융시장의 금리 전반이 상승하게 됩니다. 이는 차입 비용을 높여 소비와 투자를 억제하는 효과를 가져옵니다. 
+한국은행
+
+3. 총수요의 변화
+
+명목 금리 상승으로 인해 가계와 기업의 차입 비용이 증가하면 소비와 투자가 감소하게 됩니다. 이는 경제 전반의 총수요를 감소시키는 요인으로 작용합니다. 따라서, 긴축적 통화정책은 총수요의 감소를 초래합니다.
+
+결론
+
+긴축적 통화정책은 할인율과 명목 금리를 증가시키고, 총수요를 감소시키는 효과를 가집니다. 따라서, 주어진 선택지 중에서 '할인율 증가, 명목 금리 증가, 총수요 감소'를 나타내는 2번이 정답입니다.
+
+- Keywords
+긴축 통화 정책, 할인율, 명목 금리, 총수요, 기준금리
+---
+Your Task
+Paragraph: {paragraph}
+Question Plus: {question_plus}
+Question: {question}
+Choices: {choices}
+Answer: {answer}
+Reasoning: {reasoning}
+Keywords: YOUR ANSWER
+
+Extract up to five specific and relevant Korean keywords from the given text, such as historical events, figures, organizations, or technical terms used in the domain. Ensure your response contains only the keywords.

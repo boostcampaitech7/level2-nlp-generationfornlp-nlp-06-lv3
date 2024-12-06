@@ -1,0 +1,36 @@
+# Core Packages
+unsloth[cu121-torch250] @ git+https://github.com/unslothai/unsloth.git
+transformers==4.46.3
+scikit-learn==1.5.2
+evaluate==0.4.3
+peft==0.13.2
+trl==0.12.1
+numpy==1.26.4
+pandas==2.2.3
+bitsandbytes==0.44.1
+wikipedia-api==0.7.1
+
+# Visualization Packages
+streamlit==1.40.2
+streamlit-option-menu==0.4.0
+wandb==0.18.7
+
+# RAG Packages
+pinecone-client==5.0.1
+langchain==0.3.8
+langchain-core==0.3.21
+langchain-openai==0.2.9
+langchain-huggingface==0.1.2
+langchain-community==0.3.8
+langchain-pinecone==0.2.0
+
+# Development Packages
+tqdm==4.67.1
+ipykernel==6.29.5
+matplotlib==3.9.2
+python-dotenv==1.0.1
+
+# Linting
+black==24.10.0
+flake8==7.1.1
+isort==5.13.2

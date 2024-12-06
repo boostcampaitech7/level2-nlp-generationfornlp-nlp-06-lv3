@@ -1,0 +1,92 @@
+You are a model with excellent metacognition. Your task is to classify the reasoning process of solving a problem into **외적 추론** or **내적 추론** based on the usage of external knowledge.
+
+### Classification Criteria
+1. **내적 추론**:
+    - All reasoning steps rely solely on the content provided in Paragraph or Question Plus (if available).
+    - No external knowledge (e.g., historical, cultural, or domain-specific academic knowledge) is required.
+
+2. **외적 추론**:
+    - Any reasoning step requires external knowledge that is not explicitly available in the provided Paragraph or Question Plus.
+    - Examples of external knowledge include economic principles, historical facts, or general cultural understanding.
+
+### Step-by-Step Instructions
+1. Analyze the Reasoning provided for the problem.
+2. Identify whether the Reasoning includes information not found in the Paragraph or Question Plus.
+3. If external knowledge is required at any step, classify the problem as **외적 추론**. Otherwise, classify it as **내적 추론**.
+
+### Output Format
+Your output must be in JSON format with the following structure:
+  "analysis": "Your explanation here",
+  "category": "내적 추론 or 외적 추론"
+```
+
+---
+### Example 1
+#### Input:
+- Paragraph:
+  상소하여 아뢰기를 , “신이 좌참 찬 송준길이 올린 차자를 보았는데 , 상복(喪服) 절차에 대하여 논한 것이 신과는 큰 차이가 있었습니다 . 장자를 위하여 3년을 입는 까닭은 위로 ‘정체(正體)’가 되기 때문이고 또 전 중(傳重: 조상의 제사나 가문의 법통을 전함)하기 때문입니다 . …(중략) … 무엇보다 중요한 것은 할아버지와 아버지의 뒤를 이은 ‘정체’이지, 꼭 첫째이기 때문에 참 최 3년 복을 입는 것은 아닙니다 .”라고 하였다 .－현종실록 －
+- Question Plus:
+  ㄱ.기 사환국으로 정권을 장악하였다 .ㄴ.인 조반정을 주도 하여 집권세력이 되었다 .ㄷ.정조 시기에 탕평 정치의 한 축을 이루었다 .ㄹ.이 이와 성혼의 문인을 중심으로 형성되었다.
+- Question:
+  상소한 인물이 속한 붕당에 대한 설명으로 옳은 것만을 모두 고르면?
+- Choices:
+  ['ㄱ, ㄴ', 'ㄱ, ㄷ', 'ㄴ, ㄹ', 'ㄷ, ㄹ']
+- Reasoning:
+  지문은 송준길이 상복의 절차에 대해 논한 내용을 다루고 있으며, 이는 조선 후기 서인과 남인 간의 갈등을 반영하는 예송논쟁과 관련이 있습니다. 송준길은 서인의 대표적인 인물로, 그의 사상은 조선시대의 명분론에 뿌리를 두고 있습니다. 선택지를 분석하여 송준길과 서인의 관련성을 도출한 결과 정답은 'ㄴ, ㄹ'입니다.
+  
+#### Output:
+  "analysis": "Reasoning 과정에서 조선 후기 붕당의 역사적 맥락과 예송논쟁에 대한 배경 지식이 필요합니다. 이는 Paragraph에 명시적으로 제공되지 않은 외부 지식입니다.",
+  "category": "외적 추론"
+```
+
+---
+### Example 2
+#### Input:
+- Paragraph:
+  한국은행의 기준금리 인하로 은행 예금금리가 연 1% 수준으로 떨어지면서 대표적 수익형 부동산인 오피스텔이 또다시 관심 대상으로 떠올랐다. 최근 오피스텔 공급량 증가로 수익률이 떨어지긴 했지만 상가 등 다른 수익형 부동산에 비해 투자금이 적게 들어 중산층 실수요자들이 상대적으로 쉽게 다가갈 수 있는 상품이어서다. 오피스텔 투자에서 가장 중요한 것은 무엇보다 분양가라는 게 전문가들의 조언이다. 
+- Question Plus:
+  (Not provided)
+- Question:
+  오피스텔 투자에서 가장 중요한 요소로 전문가들이 강조하는 것은 무엇인가?
+- Choices:
+  ['위치', '분양가', '임대료', '교통망', '세입자 수요']
+- Reasoning:
+  전문가들이 오피스텔 투자에서 분양가를 가장 중요한 요소로 강조하고 있으며, 분양가가 임대수익률과 공실률에 영향을 미친다는 점도 언급됩니다. 따라서 정답은 '분양가'입니다.
+
+#### Output:
+  "analysis": "Reasoning에서 필요한 모든 정보가 Paragraph에 명시적으로 제공되었습니다. 외부 지식은 사용되지 않았습니다.",
+  "category": "내적 추론"
+
+
+---
+### Example 3
+#### Input:
+- Paragraph:
+  대일 수출 달러에 대한 수요 달러의 가치
+- Question Plus:
+  (Not provided)
+- Question:
+  일본 경제가 장기적인 경기 침체를 겪고 있다고 가정하겠습니다. 일본 가계 소득 감소가 미국의 대일 수출 달러 수요와 엔화 대비 달러 가치에 영향을 미치는 방식은 다음 중 어느 것입니까?
+- Choices:
+  ['감소, 감소, 감소', '감소, 감소, 증가', '감소, 증가, 감소', '증가, 감소, 감소']
+- Reasoning:
+  일본 가계 소득 감소가 소비 감소를 유발하며, 이는 대일 수출 달러 수요의 감소로 이어지고, 결과적으로 달러의 가치가 하락합니다. 따라서 정답은 '감소, 감소, 감소'입니다.
+
+#### Output:
+  "analysis": "Reasoning 과정에서 경제적 원리(소득 감소 -> 소비 감소 -> 수출 감소 -> 달러 가치 하락)가 사용되었습니다. 이는 Paragraph에 포함되지 않은 외부 지식입니다.",
+  "category": "외적 추론"
+---
+
+YOUR TASK
+#### Input:
+- Paragraph: {paragraph}
+- Question Plus: {question_plus}
+- Question: {question}
+- Choices: {choices}
+- Reasoning: {reasoning}
+
+#### Output:
+  "analysis": YOUR ANSWER
+  "category": YOUR ANSWER
+
+You MUST strictly follow json format.
