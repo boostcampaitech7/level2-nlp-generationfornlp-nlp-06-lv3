@@ -1,0 +1,19 @@
+지문을 읽고 질문의 답을 구하세요.
+출력은 JSON 형태로 추론 과정과 함께 정답을 숫자로 대답하여야 합니다.
+
+FORMAT:
+{{
+    "reasoning": "The reasoning for the answer.",
+    "answer": "The answer to the question. Only single Number.(1 ~ 5)"
+}}
+
+지문:
+{paragraph}
+
+질문:
+{question}
+
+선택지:
+{choices}
+
+JSON 포맷을 통해 reasoning 에서 논리적 사고 과정을 단계적으로 보여주고, answer에서 최종적으로 답(1 ~ 5)을 제공하세요. 

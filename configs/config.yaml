@@ -1,0 +1,72 @@
+model:
+  name_or_path: "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
+  response_template: "<|im_start|>assistant\n"
+  without_system_role: false # Deprecated (항상 system 없이 동작)
+  torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
+
+common:
+  seed: 42
+  device: "cuda"
+  cot_on: false # cot 사용 시 prompt_template을 cot_json으로 변경 필요
+  prompt_template: "base" # base, cot_json, raft
+
+bnb:
+  load_in_8bit: false
+  load_in_4bit: false
+  bnb_4bit_compute_dtype: "float16" # float16, float32, bfloat16 / 4 bit 양자화 데이터의 계산 데이터 타입
+  bnb_4bit_use_double_quant: false # true 시 더블 양자화(메모리 사용량 감소, 시간 더 걸림)
+  bnb_4bit_quant_type: "nf4" # nf4, fp4
+
+earlystop:
+  metric_for_best_model: "eval_loss" # 모니터링할 지표 이름
+  early_stopping_patience: 1 # 개선되지 않는 에폭 수
+  early_stopping_threshold: 0.0 # 개선으로 간주할 최소 변화량
+  greater_is_better: false # 지표가 높을수록 좋은 경우 True
+
+peft:
+  r: 6
+  lora_alpha: 8
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj"]
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+sft:
+  do_train: true
+  do_eval: true
+  lr_scheduler_type: "cosine"
+  max_seq_length: 1024
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  num_train_epochs: 3
+  learning_rate: 2.0e-5 # 지수 자릿수 앞부분을 실수 형태로 작성 ('2'-> x, '2.0'-> o)
+  weight_decay: 0.01
+  logging_strategy: "steps" # epoch or steps, epoch의 경우 logging_steps 무시
+  logging_steps: 100
+  save_strategy: "epoch"
+  eval_strategy: "epoch"
+  load_best_model_at_end: true
+  save_total_limit: 1
+  save_only_model: true
+  report_to: "wandb" # none or wandb, wandb로 변경하여 로그를 기록합니다.
+  gradient_checkpointing: false
+  gradient_accumulation_steps: 4
+
+wandb:
+  project: "MMLU"
+
+train:
+  data_path: "data/train_v2.0.1.csv" # wandb 로깅 사용시 파일명 변겅 금지(데이터 버전 정보 사용)
+  valid_data_path: "data/valid_v2.0.1.csv"
+  valid_output_path: "data/valid_output.csv"
+
+inference:
+  model_path: "outputs/Qwen2.5-3B-Instruct-bnb-4bit" # 학습된 모델로 변경 필요
+  data_path: "data/test_v1.0.2.csv"
+  output_path: "data/output.csv"
+  raw_output_path: "data/raw_output.csv"
+  default_answer: 1
+
+rag:
+  query_builder_type: CombinedKeyQueryBuilder_pqc
+  raft_on: false # RAFT 시 prompt_template을 raft로 변경 필요
